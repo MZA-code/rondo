@@ -89,9 +89,11 @@ faisceau et rend le montage tolérant à un câblage utilisateur approximatif.
 
 ### 4.4 Alimentation
 
-Convertisseur abaisseur 12 V → 5 V avec protection contre les surtensions transitoires
-(load dump) et inversion de polarité. Condensateur réservoir 1000 µF en amont, qui alimente
-le système le temps d'écrire l'odomètre lors de la coupure du contact.
+Convertisseur abaisseur 12 V → 5 V (≥ 2 A) avec fusible, protection contre l'inversion de
+polarité et écrêtage des surtensions transitoires (load dump). Condensateur réservoir
+1000 µF en amont, pour encaisser les creux de tension du faisceau.
+
+Aucune détection de coupure d'alimentation n'est nécessaire : voir §5.6.
 
 ### 4.5 Persistance
 
@@ -197,9 +199,16 @@ canaux, jamais un provider ni le matériel.
 L'intégration de la distance vit dans le core et se teste unitairement sur PC.
 
 Persistance : valeur écrite en FRAM en **double exemplaire avec CRC**, relecture avec
-sélection de la copie valide au démarrage. Le flush est déclenché par la détection de chute
-de tension sur le +12 V en amont du convertisseur, avant que la tension d'alimentation ne
-s'effondre.
+sélection de la copie valide au démarrage.
+
+**L'écriture est continue, tous les 10 mètres parcourus.** Une FRAM supporte plus de 10¹²
+cycles d'écriture : à 100 km/h cela représente une écriture toutes les 0,36 s, soit environ
+10 millions d'écritures sur 100 000 km — quatre ordres de grandeur sous la limite du
+composant. La valeur en mémoire est donc toujours à jour à 10 mètres près.
+
+Il n'y a par conséquent **rien à sauvegarder au moment de la coupure du contact** : pas de
+détection de brownout, pas de comparateur, pas d'ISR de coupure. C'est la raison d'être du
+choix de la FRAM plutôt que d'une EEPROM.
 
 Un **offset d'odomètre configurable** permet de repartir du kilométrage réel de la moto.
 
@@ -242,7 +251,7 @@ Sous FreeRTOS :
 | Acquisition et publication des canaux | 50 Hz | haute |
 | GNSS (série) | 10 Hz | moyenne |
 | Interface LVGL | 30 fps | basse |
-| Persistance | à la demande | basse + ISR de coupure |
+| Persistance FRAM | tous les 10 m parcourus | basse |
 
 **Règle non négociable :** l'interface ne doit jamais pouvoir retarder l'acquisition ni
 l'odomètre. Si l'affichage sature, le kilométrage reste juste.
