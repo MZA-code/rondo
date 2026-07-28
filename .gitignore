@@ -1,3 +1,5 @@
 .idea/
 .remember/
 img/
+.claude/settings.local.json
+.claude/*.tmp.*

@@ -1,7 +1,8 @@
-# KDX Dashboard — Compteur moto numérique open source
+# Rondo — Compteur moto numérique open source
 
 **Date :** 2026-07-28
 **Statut :** conception validée, prêt pour plan d'implémentation
+**Dépôt :** `github.com/MZA-code/rondo`
 
 ## 1. Objectif
 
@@ -9,7 +10,12 @@ Remplacer le compteur d'origine d'une Kawasaki KDX 125 par un tableau de bord nu
 sur écran rond tactile, intégré dans la cloche du support d'origine.
 
 Le projet est publié en open source. Il doit donc être **utilisable sur d'autres modèles de
-moto sans modification du code**, uniquement par configuration.
+moto sans modification du code**, uniquement par configuration. La KDX 125 est la moto de
+référence, pas la cible unique : rien dans le code ne doit lui être spécifique, tout ce qui
+la concerne vit dans un profil sous `profiles/`.
+
+Le nom « Rondo » renvoie à la forme ronde de l'écran et à la forme musicale bâtie sur un
+thème qui revient — le compteur est construit autour de thèmes graphiques interchangeables.
 
 ## 2. Contexte matériel
 
